@@ -1,3 +1,6 @@
+permissions:
+  contents: write
+  
 name: DarkWeb-Forums-Tracker
 
 # 每日触发一次
