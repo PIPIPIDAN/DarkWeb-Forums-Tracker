@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0'
+    xmlns:atom='http://www.w3.org/2005/Atom'>
+    <channel>
+        <title>数据泄露监控日报 RSS 2026-07-05</title>
+        <description>每日数据泄露监控RSS feed，包含2026-07-05的最新数据泄露信息</description>
+        <link>https://adminlove520.github.io/DarkWeb-Forums-Tracker/</link>
+        <atom:link href='https://adminlove520.github.io/DarkWeb-Forums-Tracker/rss/daily_rss_2026-07-05.xml' rel='self' type='application/rss+xml' />
+        <language>zh-CN</language>
+        <lastBuildDate>Sun, 05 Jul 2026 00:00:42 GMT</lastBuildDate>
+        <ttl>60</ttl>
+        
+        <item>
+            <title>1000+ фото для пацанов</title>
+            <link>https://hard-tm.su/threads/74417/</link>
+            <description>1000+ фото для пацанов</description>
+            <pubDate>Sun, 05 Jul 2026 00:00:30 GMT</pubDate>
+            <guid isPermaLink='false'>https://hard-tm.su/threads/74417/_2026-07-05 00:00:30</guid>
+        </item>
+        <item>
+            <title>есть сливы девушек из актобе?</title>
+            <link>https://hard-tm.su/threads/163226/</link>
+            <description>есть сливы девушек из актобе?</description>
+            <pubDate>Sun, 05 Jul 2026 00:00:29 GMT</pubDate>
+            <guid isPermaLink='false'>https://hard-tm.su/threads/163226/_2026-07-05 00:00:29</guid>
+        </item>
+        <item>
+            <title>Нашел прикольный сет наклеек</title>
+            <link>https://hard-tm.su/threads/176664/</link>
+            <description>Нашел прикольный сет наклеек</description>
+            <pubDate>Sun, 05 Jul 2026 00:00:29 GMT</pubDate>
+            <guid isPermaLink='false'>https://hard-tm.su/threads/176664/_2026-07-05 00:00:29</guid>
+        </item>
+    </channel>
+</rss>
