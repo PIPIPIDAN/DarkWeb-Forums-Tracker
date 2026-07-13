@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkWeb Forums Tracker Reports 2026-07-13</title>
+    <style>
+        /* 全局样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            /* 终端风格配色 */
+            --bg-primary: #0a0e17;
+            --bg-secondary: #121721;
+            --bg-tertiary: #1a1f2e;
+            --bg-gradient: linear-gradient(135deg, #00ff41, #00e0ff);
+            --primary-color: #00ff41;
+            --primary-dark: #00d437;
+            --secondary-color: #00e0ff;
+            --accent-color: #ff007f;
+            --success-color: #00ff41;
+            --warning-color: #ffff00;
+            --danger-color: #ff007f;
+            --text-primary: #00e0ff;
+            --text-secondary: #00e0ff;
+            --text-muted: #6b7280;
+            --border-color: #2d3748;
+            --border-light: #222936;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 255, 65, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 255, 65, 0.15), 0 2px 4px -1px rgba(0, 255, 65, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 255, 65, 0.2), 0 4px 6px -2px rgba(0, 255, 65, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 255, 65, 0.25), 0 10px 10px -5px rgba(0, 255, 65, 0.15);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 255, 65, 0.3);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Courier New', Courier, 'Consolas', 'Monaco', 'Ubuntu Mono', monospace;
+            line-height: 1.7;
+            color: var(--text-primary);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-secondary);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 65, 0.05) 0%, rgba(0, 255, 65, 0.05) 90%),
+                radial-gradient(circle at 90% 80%, rgba(0, 224, 255, 0.05) 0%, rgba(0, 224, 255, 0.05) 90%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        /* 标题样式 */
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+            margin: 0;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: var(--bg-primary);
+            color: var(--primary-color);
+            padding: 48px 32px;
+            border: 2px solid var(--primary-color);
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            transform: rotate(45deg);
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            transform: rotate(-45deg);
+            animation: float 12s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: rotate(45deg) translateX(0) translateY(0);
+            }
+            50% {
+                transform: rotate(45deg) translateX(20px) translateY(20px);
+            }
+        }
+        
+        header > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .article-count {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+        
+        .update-time {
+            font-size: 1rem;
+            margin-top: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        header:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        /* 文章卡片样式 */
+        .article {
+            background-color: var(--bg-primary);
+            padding: 28px;
+            margin-bottom: 24px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--bg-gradient);
+            border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+            transition: transform 0.3s ease;
+        }
+        
+        .article::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            transition: height 0.3s ease;
+            z-index: 0;
+        }
+        
+        .article:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+            border-color: var(--primary-color);
+        }
+        
+        .article:hover::before {
+            transform: scaleY(1.05);
+        }
+        
+        .article:hover::after {
+            height: 100%;
+        }
+        
+        .article > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .article-title {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.35rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 16px;
+            position: relative;
+            padding-right: 12px;
+        }
+        
+        .article-title::after {
+            content: '🔗';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .article-title:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+            transform: translateX(4px);
+        }
+        
+        .article-title:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(4px);
+        }
+        
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .article-time,
+        .article-source,
+        .article-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        /* 移除发布时间和来源前面的绿点 */
+        
+        .article:hover .article-time,
+        .article:hover .article-source,
+        .article:hover .article-category {
+            color: var(--primary-color);
+        }
+        
+        
+        
+        /* 调整文章元信息的顺序 */
+        .article-time {
+            order: 1;
+        }
+        
+        .article-source {
+            order: 2;
+        }
+        
+        .article-category {
+            order: 3;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            margin-top: 64px;
+            padding: 24px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        footer p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+            font-weight: 500;
+        }
+        
+        footer a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            header {
+                padding: 32px 24px;
+                margin-bottom: 24px;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .statistics {
+                padding: 24px;
+            }
+            
+            .statistics h2 {
+                font-size: 1.5rem;
+            }
+            
+            .statistics-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .statistics-section {
+                padding: 20px;
+            }
+            
+            .statistics-section h3 {
+                font-size: 1.15rem;
+            }
+            
+            .statistics-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 12px;
+            }
+            
+            .statistics-item {
+                padding: 16px 12px;
+            }
+            
+            .statistics-value {
+                font-size: 1.5rem;
+            }
+            
+            .article {
+                padding: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .article-title {
+                font-size: 1.25rem;
+            }
+            
+            .article-meta {
+                gap: 16px;
+                padding-top: 12px;
+            }
+            
+            .article-time,
+            .article-source,
+            .article-category {
+                font-size: 0.85rem;
+                gap: 6px;
+            }
+            
+            footer {
+                margin: 48px 0 0 0;
+                padding: 24px 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            header {
+                padding: 28px 20px;
+                margin-bottom: 20px;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .statistics {
+                padding: 20px;
+            }
+            
+            .statistics h2 {
+                font-size: 1.35rem;
+            }
+            
+            .statistics-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .statistics-section {
+                padding: 16px;
+            }
+            
+            .statistics-section h3 {
+                font-size: 1.1rem;
+            }
+            
+            .statistics-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .statistics-item {
+                padding: 14px 10px;
+            }
+            
+            .statistics-value {
+                font-size: 1.35rem;
+            }
+            
+            .article {
+                padding: 20px;
+                margin-bottom: 16px;
+            }
+            
+            .article-title {
+                font-size: 1.15rem;
+            }
+            
+            .article-meta {
+                gap: 12px;
+                flex-direction: column;
+                align-items: flex-start;
+                padding-top: 10px;
+            }
+            
+            .article-time,
+            .article-source,
+            .article-category {
+                font-size: 0.8rem;
+                gap: 5px;
+            }
+            
+Gne            footer {
+                margin: 40px 0 0 0;
+                padding: 20px 12px;
+            }
+        }
+        
+        /* 统计信息样式 */
+        .statistics {
+            background-color: var(--bg-primary);
+            padding: 32px;
+            margin-bottom: 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .statistics::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-gradient);
+        }
+        
+        .statistics h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .statistics h2::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-light);
+        }
+        
+        .statistics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .statistics-section {
+            background-color: var(--bg-secondary);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .statistics-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .statistics-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .statistics-section h3::before {
+            content: '';
+            width: 6px;
+            height: 20px;
+            background: var(--bg-gradient);
+            border-radius: 3px;
+        }
+        
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 16px;
+        }
+        
+        .statistics-item {
+            background-color: var(--bg-primary);
+            padding: 20px 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .statistics-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--bg-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .statistics-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        
+        .statistics-item:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .statistics-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        
+        .statistics-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        
+        .statistics-item:hover .statistics-value {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            border-radius: 6px;
+            border: 3px solid var(--bg-tertiary);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--primary-dark), var(--secondary-color));
+        }
+        
+        /* Firefox滚动条样式 */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--bg-tertiary);
+        }
+        
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 加载动画效果 */
+        .article {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .article:nth-child(1) { animation-delay: 0.1s; }
+        .article:nth-child(2) { animation-delay: 0.2s; }
+        .article:nth-child(3) { animation-delay: 0.3s; }
+        .article:nth-child(4) { animation-delay: 0.4s; }
+        .article:nth-child(5) { animation-delay: 0.5s; }
+        .article:nth-child(6) { animation-delay: 0.6s; }
+        .article:nth-child(7) { animation-delay: 0.7s; }
+        .article:nth-child(8) { animation-delay: 0.8s; }
+        .article:nth-child(9) { animation-delay: 0.9s; }
+        .article:nth-child(10) { animation-delay: 1s; }
+    </style>
+</head>
+<body>
+    <header style="border: 1px solid var(--primary-color); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 32px 24px; text-align: center; margin-bottom: 32px;">
+        <h1 style="color: var(--primary-color); text-shadow: 0 0 15px rgba(0, 255, 65, 0.7); font-size: 2rem; margin-bottom: 16px;">DARKWEB论坛数据泄露监控报告 2026-07-13</h1>
+        <div class="article-count" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); font-size: 1.25rem; margin-bottom: 12px;">📊 共收集到 28 条数据泄露相关信息</div>
+        <div class="update-time" style="color: var(--text-secondary); font-size: 1rem;">🕒 最后更新时间：2026-07-13 02:41:16</div>
+    </header>
+    
+    
+    <section class="statistics" style="border: 1px solid var(--secondary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 224, 255, 0.2); padding: 24px; margin-bottom: 32px; text-align: center; border-radius: 12px;">
+        <h2 style="color: var(--secondary-color); text-shadow: 0 0 10px rgba(0, 224, 255, 0.5); font-size: 1.75rem; margin-bottom: 24px;">统计信息</h2>
+        <div class="statistics-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;">
+            
+            <div class="statistics-section" style="border: 1px solid var(--primary-color); background-color: var(--bg-secondary); padding: 20px; border-radius: 12px; min-width: 320px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15); flex: 1; min-height: 400px; display: flex; flex-direction: column;">
+                <h3 style="color: var(--warning-color); font-size: 1.25rem; margin-bottom: 16px; text-align: center;">按数据源统计</h3>
+                <div class="statistics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1;">
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">Xforums.st</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">19</div>
+                    </div>
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">niflheim</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">3</div>
+                    </div>
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">hard-tm</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">3</div>
+                    </div>
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">dublikat</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">1</div>
+                    </div>
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">blackbones</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">1</div>
+                    </div>
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">ascarding</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">1</div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+            <div class="statistics-section" style="border: 1px solid var(--primary-color); background-color: var(--bg-secondary); padding: 20px; border-radius: 12px; min-width: 320px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.15); flex: 1; min-height: 400px; display: flex; flex-direction: column;">
+                <h3 style="color: var(--warning-color); font-size: 1.25rem; margin-bottom: 16px; text-align: center;">按小时统计</h3>
+                <div class="statistics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; flex: 1;">
+                    
+                    <div class="statistics-item" style="border: 1px solid var(--primary-color); background-color: var(--bg-primary); padding: 16px; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); display: flex; flex-direction: column; justify-content: center; min-height: 80px;">
+                        <div class="statistics-label" style="color: var(--text-secondary); font-weight: bold; font-size: 0.9rem;">02:00</div>
+                        <div class="statistics-value" style="color: var(--success-color); font-size: 1.8rem; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);">28</div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+        </div>
+    </section>
+    
+    
+    <main>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://dublikat.club/threads/otrisovka-dokumentov-ot-azazelien.159267/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Отрисовка документов от AzazeLien.</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:11</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：dublikat <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://niflheim.world/threads/10-3k-%E2%9C%A8-mix-%E2%9C%A8-valid-mail-access-13-07.178067/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">[10.3K] ✨ Mix ✨ Valid Mail Access 13.07</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:09</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：niflheim <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://niflheim.world/threads/2-8k-%E2%9A%A1hotmail%E2%9A%A1valid-mail-access-13-07.178066/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">[2.8K]⚡Hotmail⚡Valid Mail Access 13.07</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:09</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：niflheim <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://niflheim.world/threads/5-464-hotmail-goods.178065/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">(5,464) Hotmail Goods</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:09</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：niflheim <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://ascarding.net/threads/18449/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Need help as a beginner</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:08</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：ascarding <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://hard-tm.su/threads/178047/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">[2.8K]⚡Hotmail⚡Valid Mail Access 13.07</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:06</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：hard-tm <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://hard-tm.su/threads/165911/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Ищу слив secret anel (@roseangellllllll)</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:06</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：hard-tm <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://hard-tm.su/threads/14274/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Приятные сисечки</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:06</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：hard-tm <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://blackbones.net/threads/greek-bank-logs.24961/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Greek bank logs</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:05</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：blackbones <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-lk-vao4w1dgr7pe4zrnq0gf8qdmbqzk784p2l-2026-07-10t8_43_2.633068/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - LK[VAO4W1DGR7PE4ZRNQ0GF8QDMBQZK784P2L][2026-07-10T8_43_2]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:03</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-bd-xgvcuei8i2hfjvoca4r708cwhd2cp175xe-2026-07-10t86_8_40.633067/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - BD[XGVCUEI8I2HFJVOCA4R708CWHD2CP175XE][2026-07-10T86_8_40]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:03</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-za-b4urdeasl30bykqk4tpmibaqjqtx1lqy6b-2026-07-10t47_26_49.633066/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - ZA[B4URDEASL30BYKQK4TPMIBAQJQTX1LQY6B][2026-07-10T47_26_49]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:03</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-lk-tq5m796052fu1hbwfy98w51jmob8ziofmf-2026-07-10t90_40_12.633065/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - LK[TQ5M796052FU1HBWFY98W51JMOB8ZIOFMF][2026-07-10T90_40_12]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:03</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-ph-41sjkbqsa48hxnwa5r0yb2nodclm6qz9v1-2026-07-10t12_0_11.633064/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - PH[41SJKBQSA48HXNWA5R0YB2NODCLM6QZ9V1][2026-07-10T12_0_11]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:03</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-de-y0lhvusiv71a9c0ydmnxtte3mg8yobtfl8-2026-07-10t11_22_51.633082/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - DE[Y0LHVUSIV71A9C0YDMNXTTE3MG8YOBTFL8][2026-07-10T11_22_51]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-jfl6ddh6z9bkgn5zwte9vc14mhehftk7vq-2026-07-10t67_12_28.633081/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[JFL6DDH6Z9BKGN5ZWTE9VC14MHEHFTK7VQ][2026-07-10T67_12_28]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-id-oxpi4ado7ds3hncmgzz5vxfotshm2a1mal-2026-07-10t88_6_30.633080/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - ID[OXPI4ADO7DS3HNCMGZZ5VXFOTSHM2A1MAL][2026-07-10T88_6_30]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-lk-v3dhlhz2i0j7hirs7ynsq782gk91i3uzyo-2026-07-10t3_48_25.633079/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - LK[V3DHLHZ2I0J7HIRS7YNSQ782GK91I3UZYO][2026-07-10T3_48_25]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-r7cr8v6qr5vb4qcu71xam9di73qysx6kll-2026-07-10t91_57_6.633078/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[R7CR8V6QR5VB4QCU71XAM9DI73QYSX6KLL][2026-07-10T91_57_6]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-i004mqg5ebq9qmfwc9twip4c26nw27fe40-2026-07-10t91_29_47.633077/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[I004MQG5EBQ9QMFWC9TWIP4C26NW27FE40][2026-07-10T91_29_47]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-4l8l9hpg1tlktuizz53hoxqjvsrfa3zlsg-2026-07-10t26_38_16.633076/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[4L8L9HPG1TLKTUIZZ53HOXQJVSRFA3ZLSG][2026-07-10T26_38_16]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-ru-nn4y96qbeoly5eh5uitebzjbhnhg4lnc0v-2026-07-10t32_19_8.633075/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - RU[NN4Y96QBEOLY5EH5UITEBZJBHNHG4LNC0V][2026-07-10T32_19_8]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/10-3k-mix-valid-mail-access-13-07.633074/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">[10.3K] ✨ Mix ✨ Valid Mail Access 13.07</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-sv9x7pjtgncezo36cw6t0mijbiwrt1227v-2026-07-10t45_51_27.633073/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[SV9X7PJTGNCEZO36CW6T0MIJBIWRT1227V][2026-07-10T45_51_27]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-mw-orjen19crt7ecjcbz6xu49rt92cnmrfdi6-2026-07-10t68_46_39.633072/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - MW[ORJEN19CRT7ECJCBZ6XU49RT92CNMRFDI6][2026-07-10T68_46_39]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-jo-ec7ltvgxw9d92ha70tzlj0tno5b3lmc1nh-2026-07-10t0_41_6.633071/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - JO[EC7LTVGXW9D92HA70TZLJ0TNO5B3LMC1NH][2026-07-10T0_41_6]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-pk-k4c7yz09z0ahdz796p72ke01vq2ogs5yb2-2026-07-10t95_54_30.633070/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - PK[K4C7YZ09Z0AHDZ796P72KE01VQ2OGS5YB2][2026-07-10T95_54_30]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+        <div class="article" style="border: 1px solid var(--primary-color); background-color: var(--bg-tertiary); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); padding: 20px; margin-bottom: 24px; border-radius: 12px; transition: all 0.3s ease;">
+            <a href="https://xforums.st/threads/stealer-log-by-x-forums-in-76hwmrfdke7rsludaj1a3fuc85g4ii9t01-2026-07-10t69_40_56.633069/" class="article-title" target="_blank" style="color: var(--secondary-color); font-weight: bold; text-shadow: 0 0 8px rgba(0, 224, 255, 0.4); display: block; margin-bottom: 16px; text-align: center; font-size: 1.1rem; transition: all 0.3s ease;">Stealer Log BY X Forums - IN[76HWMRFDKE7RSLUDAJ1A3FUC85G4II9T01][2026-07-10T69_40_56]</a>
+            <div class="article-meta" style="color: var(--text-secondary); display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+                <div class="article-time" style="color: var(--warning-color); font-size: 0.9rem; display: flex; align-items: center;">发布时间：2026-07-13 02:41:02</div>
+                <div class="article-source" style="color: var(--success-color); font-size: 0.9rem; display: flex; align-items: center;">来源：Xforums.st <span style="width: 8px; height: 8px; background-color: var(--success-color); border-radius: 50%; margin-left: 6px; box-shadow: 0 0 8px var(--success-color);"></span></div>
+                
+            </div>
+        </div>
+        
+    </main>
+    
+    <footer>
+        <p>Power By 东方隐侠安全团队 Anonymous@ <a href="https://www.dfyxsec.com/" target="_blank" style="color: var(--primary-color); text-decoration: none;">隐侠安全客栈</a></p>
+    </footer>
+</body>
+</html>
